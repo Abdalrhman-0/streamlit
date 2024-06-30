@@ -127,13 +127,18 @@ if target_column and feature_columns:
 else:
     st.write("Please select both feature columns (X) and a target column (Y).")
 
+
 encoding_method = st.selectbox("Select encoding method for categorical columns", ['Label Encoding', 'One-Hot Encoding'])
 if X is not None:
     categorical_columns = X.select_dtypes(include=['object']).columns
 if categorical_columns is not None:
   if len(categorical_columns) > 0:   
     X, encoders = encode_categorical_features(X, categorical_columns, encoding_method)
-st.write("Applying PyCaret...")
+
+if X is None:
+    pass
+else:
+    st.write("Applying PyCaret...")
 
 if task_type == 'classification':
     clf_setup(data=processed_df, target=target_column, session_id=123)
@@ -150,5 +155,4 @@ elif task_type == 'regression':
 else:
     st.write("Please select both feature columns (X) and a target column (Y).")
 
-st.write("Best model:")
-st.write(best_model)
+st.write("Best model:" ,best_model)
