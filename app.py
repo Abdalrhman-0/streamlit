@@ -10,7 +10,8 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 X = None
 categorical_columns = None
 task_type = None
-best_model =None
+best_model = None
+columns_to_drop = None
 def handle_missing_numerical_values(df, strategy):
     numeric_cols = df.select_dtypes(include=np.number).columns
     for col in numeric_cols:
@@ -102,10 +103,13 @@ else:
 
 columns_to_drop = st.multiselect("choose the columns you want to drop",options = df.columns)
 
-if columns_to_drop :
-    df.drop(columns = columns_to_drop)
-else:
-    st.write("No columns selected for dropping")
+def drop_columns():
+    if columns_to_drop is not None:
+        df.drop(columns = columns_to_drop , inplace=True)
+        return df
+    else:
+        st.write("No columns selected for dropping")
+drop_columns()
 
 st.subheader("Select numerical Imputation Strategy")
 strategy_numerical = st.selectbox("Choose imputation strategy:", ('mean', 'median', 'mode','drop rows'))
